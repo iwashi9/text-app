@@ -35,7 +35,7 @@ function App() {
   });
 
   const handleSubmit = async () => {
-    const response = await axios.post('http://localhost:5000/api/send-text',
+    const response = await axios.post('https://text-app-backend.onrender.com/api/send-text',
       { text: inputText },
       { headers: { "Content-Type": "application/json", } }
     );
