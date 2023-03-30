@@ -17,11 +17,7 @@ import {
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { styled } from '@mui/material/styles';
-import FormGroup from '@mui/material/FormGroup';
-import Stack from '@mui/material/Stack';
 import axios from 'axios';
 
 import MaterialUISwitch from './MaterialUISwitch';
