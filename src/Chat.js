@@ -12,7 +12,6 @@ import axios from "axios";
 
 function Chat({ setAlert }) {
   const [inputText, setInputText] = useState("");
-  const [responseData, setResponseData] = useState("");
   const [history, setHistory] = useState([]);
 
   const historyEndRef = useRef(null);
@@ -33,7 +32,6 @@ function Chat({ setAlert }) {
         }
       );
       const data = response.data;
-      setResponseData(data.text);
       setHistory([
         ...history,
         { text: inputText, isUser: true },
