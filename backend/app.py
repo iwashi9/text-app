@@ -4,10 +4,13 @@ import logging
 from flask import Flask, Response, request, jsonify, make_response
 from flask_cors import CORS, cross_origin
 
-origin = "https://sensational-yeot-3009fc.netlify.app"
+allowed_origin = [
+    "https://sensational-yeot-3009fc.netlify.app",
+    "https://main--sensational-yeot-3009fc.netlify.app",
+    "http://localhost:3000"
+]
 
 app = Flask(__name__)
-CORS(app, resources={"/api/*": {"origins": origin}}, supports_credentials=True)
 app.config['CORS_HEADERS'] = "Content-Type"
 
 def process_text(text):
@@ -17,7 +20,8 @@ def process_text(text):
 def options_preflight():
     print("Preflight Request")
     response = Response(status=200)
-    response.headers.add('Access-Control-Allow-Origin', origin)
+    if request.origin in allowed_origin:
+        response.headers.add('Access-Control-Allow-Origin', request.origin)
     response.headers.add('Access-Control-Allow-Headers', 'content-type')
     response.headers.add('Access-Control-Allow-Methods', 'DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
@@ -33,7 +37,8 @@ def post_text():
     response = jsonify(**{'text': text})
     response.status = 200
     response.headers.add('Access-Control-Allow-Credentials', 'true')
-    response.headers.add('Access-Control-Allow-Origin', origin)
+    if request.origin in allowed_origin:
+        response.headers.add('Access-Control-Allow-Origin', request.origin)
     response.headers.add('Vary', 'Origin')
     return response
 

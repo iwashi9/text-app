@@ -1,16 +1,11 @@
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import React, { useState } from "react";
 import "./App.css";
 import {
   AppBar,
-  Drawer,
   Toolbar,
   IconButton,
   Container,
-  TextField,
-  Button,
-  List,
-  ListItem,
-  ListItemText,
   Typography,
   Box,
 } from "@mui/material";
@@ -18,17 +13,26 @@ import { Menu as MenuIcon } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import axios from 'axios';
 
 import MaterialUISwitch from './MaterialUISwitch';
+import DrawerComponent from './DrawerComponent';
+import Home from "./Home";
+import Chat from "./Chat";
+import Settings from "./Settings";
+import AlertSnackbar from "./AlertSnackbar";
 
 function App() {
-  const [inputText, setInputText] = useState("");
-  const [responseData, setResponseData] = useState("");
-  const [history, setHistory] = useState([]);
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [apiUrl, setApiUrl] = useState("https://text-app-backend.onrender.com/api/send-text");
+  const [alert, setAlert] = useState({
+    severity: 'info',
+    message: '',
+    open: false,
+  });
+
+  const handleCloseSnackbar = () => {
+    setAlert({ ...alert, open: false });
+  };
 
   const theme = createTheme({
     palette: {
@@ -36,107 +40,56 @@ function App() {
     },
   });
 
-  const handleSubmit = async () => {
-    const response = await axios.post(apiUrl,
-      { text: inputText },
-      { headers: { "Content-Type": "application/json", } }
-    );
-    const data = response.data;
-    setResponseData(data.text);
-    setHistory([...history, inputText]);
-    setInputText("");
-  };
-
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={() => setDrawerOpen(!drawerOpen)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Text App
-          </Typography>
-          <FormControlLabel
-            control={
-              <MaterialUISwitch
-                sx={{ m: 1 }}
-                checked={darkMode}
-                onChange={() => setDarkMode(!darkMode)}
-              />
-            }
-            label=""
-          />
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        anchor="left"
-        open={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      >
-        <Box sx={{ width: 250 }}>
-          <List>
-            <ListItem>
-              <ListItemText primary="Item 1" />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Item 2" />
-            </ListItem>
-            {/* 他のリストアイテムを追加 */}
-          </List>
-        </Box>
-      </Drawer>
-      <Container maxWidth="sm">
-        <Box sx={{ my: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Text App
-          </Typography>
-          <TextField
-            label="APIのURLを入力"
-            fullWidth
-            value={apiUrl}
-            onChange={(e) => setApiUrl(e.target.value)}
-            variant="outlined"
-            sx={{ marginBottom: 2 }}
-          />
-          <TextField
-            label="テキストを入力"
-            multiline
-            rows={4}
-            fullWidth
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            variant="outlined"
-            sx={{ marginBottom: 2 }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSubmit}
-            sx={{ marginBottom: 2 }}
-          >
-            送信
-          </Button>
-          {responseData && (
-            <Typography variant="body1">{responseData}</Typography>
-          )}
-          <Typography variant="h6" component="h2" gutterBottom>
-            送信履歴:
-          </Typography>
-          <List>
-            {history.map((item, index) => (
-              <ListItem key={index}>{item}</ListItem>
-            ))}
-          </List>
-        </Box>
-      </Container>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={() => setDrawerOpen(!drawerOpen)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div" className="menuPageTitle" sx={{ flexGrow: 1 }}>
+              <NavLink
+                to="/"
+                sx={{
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                Text App
+              </NavLink>
+            </Typography>
+            <FormControlLabel
+              control={
+                <MaterialUISwitch
+                  sx={{ m: 1 }}
+                  checked={darkMode}
+                  onChange={() => setDarkMode(!darkMode)}
+                />
+              }
+              label=""
+            />
+          </Toolbar>
+        </AppBar>
+        <DrawerComponent open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+        <Container maxWidth="sm">
+          <Box sx={{ my: 4 }}>
+            <Routes>
+              <Route path="/" element={<Home setAlert={setAlert} />} />
+              <Route path="/chat" element={<Chat setAlert={setAlert} />} />
+              <Route path="/settings" element={<Settings />} />
+            </Routes>
+            <AlertSnackbar alert={alert} onClose={handleCloseSnackbar} />
+          </Box>
+        </Container>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

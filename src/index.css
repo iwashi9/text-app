@@ -11,3 +11,55 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.menuPageTitle a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-history {
+  flex-grow: 1;
+  overflow-y: scroll;
+  padding-right: 16px;
+}
+
+.chat-history-scrollable {
+  max-height: calc(100% - 96px);
+  /* 画面全体からヘッダーと入力欄の高さを引く */
+}
+
+.chat-input-container {
+  position: sticky;
+  bottom: 0;
+  padding: 16px;
+  background-color: #fff;
+}
+
+.chat-input {
+  display: flex;
+  align-items: flex-end;
+}
+
+/* 送信ボタンのスタイルを調整 */
+.MuiIconButton-root {
+  padding: 8px;
+  margin-bottom: 4px;
+}
+
+/* 画面が狭い場合の調整 */
+@media (max-width: 600px) {
+  .chat-input-container {
+    padding: 8px;
+  }
+
+  .MuiIconButton-root {
+    padding: 4px;
+    margin-bottom: 0;
+  }
+}
