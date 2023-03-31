@@ -28,6 +28,8 @@ function App() {
   const [history, setHistory] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [apiUrl, setApiUrl] = useState("https://text-app-backend.onrender.com/api/send-text");
+
   const theme = createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
@@ -35,7 +37,7 @@ function App() {
   });
 
   const handleSubmit = async () => {
-    const response = await axios.post('https://text-app-backend.onrender.com/api/send-text',
+    const response = await axios.post(apiUrl,
       { text: inputText },
       { headers: { "Content-Type": "application/json", } }
     );
@@ -65,7 +67,6 @@ function App() {
             control={
               <MaterialUISwitch
                 sx={{ m: 1 }}
-                defaultChecked
                 checked={darkMode}
                 onChange={() => setDarkMode(!darkMode)}
               />
@@ -96,6 +97,14 @@ function App() {
           <Typography variant="h4" component="h1" gutterBottom>
             Text App
           </Typography>
+          <TextField
+            label="APIのURLを入力"
+            fullWidth
+            value={apiUrl}
+            onChange={(e) => setApiUrl(e.target.value)}
+            variant="outlined"
+            sx={{ marginBottom: 2 }}
+          />
           <TextField
             label="テキストを入力"
             multiline

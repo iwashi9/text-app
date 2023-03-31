@@ -4,7 +4,7 @@ import logging
 from flask import Flask, Response, request, jsonify, make_response
 from flask_cors import CORS, cross_origin
 
-origin = "https://sensational-yeot-3009fc.netlify.app/"
+origin = "https://sensational-yeot-3009fc.netlify.app"
 
 app = Flask(__name__)
 CORS(app, resources={"/api/*": {"origins": origin}}, supports_credentials=True)
